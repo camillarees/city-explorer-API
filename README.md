@@ -4,6 +4,8 @@
 **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
+- [Figma](https://www.figma.com/file/SXmrRRCg2FZfSBwWOJTxjf/Web-Request-Response-Cycle?node-id=0%3A1)
+
 <!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
 
 ## Getting Started
@@ -18,4 +20,16 @@
 01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource. -->
 
 ## Credit and Collaborations
-<!-- Give credit (and a link) to other people or resources that helped you build this application. -->
+- 
+
+## Timeline
+
+Name of feature: 1. Set up server repository
+
+Estimate of time needed to complete: 1.5
+
+Start time: 11:00
+
+Finish time: 1:30
+
+Actual time needed to complete: 2.5
