@@ -1,0 +1,24 @@
+{
+  "name": "city-explorer-api",
+  "version": "1.0.0",
+  "description": "an application for user to explore and learn about cities around the world",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/camillarees/city-explorer-API.git"
+  },
+  "author": "Camilla Rees",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/camillarees/city-explorer-API/issues"
+  },
+  "homepage": "https://github.com/camillarees/city-explorer-API#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.1"
+  }
+}
