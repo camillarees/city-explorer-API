@@ -4,7 +4,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const data = require('./data/weather.json');
+const weatherData = require('./data/weather.json');
 const { response } = require('express');
 
 // create an instance of an Express server
@@ -23,53 +23,57 @@ app.get('/', (request, response) => {
 });
 
 // define an endpoint that gets the weather data and returns it to React
-app.get('/weather', (request, response) => {
+app.get('/weather', (request, response, next) => {
+    try {
 //grab the searchQuery from the request object
 // notice that query parameter is named type
 // type is the name of query parameter we must send along with Axios from React in order to ask for data from our server 
-const type = request.query.seattle;
+const lat = request.query.lat;
+const lon = request.query.lon;
+const searchQuery = request.query.searchQuery;
 console.log('query parameter: ', request.query);
-console.lof('type: ', type);
-response.send('testing weather endpoint') // this is going to change
-const weather = new Data(type);
-const cityName = weather.getItems();
+console.log('searchQuery: ', searchQuery);
+const weather = new Forecast(searchQuery);
+const cityName = weather.getWeather();
+// response.send('testing weather endpoint') // this is going to change
 response.status(200).send(cityName);
 } catch(error) {
-    //next can be used to pass...
+   
     next(error)
+}
 });
 
-class Data {
-    constructor {type}{
+class Forecast {
+    constructor (searchQuery) {
         // find method to find the type of list we want to return
-        let {cityName, lon, lat } = data.data.find(data => data.city_name === type);
-        this.type = cityName 
-        this.lon = lon;
-        this.lat = lat;
-    }
-};
+        let { city_name, data } = weatherData.find(city => city.city_name.toLowerCase() === searchQuery.toLowerCase());
+        this.cityName = city_name; 
+        this.weather = data;
+    };
 
 // method that gets just the name and desc properties from our item objects
-getItems() {
-    return this.itemValues.map(item => {{
-        lon: this.cityName.lon
-        lat: this.cityName.lat
-    }});
+getWeather() {
+    return this.weather.map(day => ({
+        forecast: day.weather.description,
+        date: day.datetime
+    }));
+}
 }
 
-app.get('/fakeError')
-try {
-    const nonexistentData = require('./nonexistentData/js');
-    response.send(nonexistentData);
-} catch(error) {
-    next(error.message);
-}
+app.get('/fakeError', (request, response, next) => {
+    try {
+        const nonexistentData = require('./nonexistentData/js');
+        response.send(nonexistentData);
+    } catch(error) {
+        next(error.message);
+    }
+    // error handling middleware must be the last app.use() defined in the server file
+    app.use((error, request, response, next) => {
+        console.log(error);
+        response.status(500).send(error);
+    });
+})
 
-// error handling middleware must be the last app.use() defined in the server file
-app.use(error, request, response, next) => {
-    console.log(error);
-    response.status(500).send(error);
-}
 
 // this line of code needs to be the last line in the file
 // listen tells our app which port to listen on
