@@ -56,10 +56,10 @@ app.get('/movies', async (request, response, next) => {
     const movie = request.query.city;
     console.log(movie);
     try {
-        const moviesURL = `https://api.themoviedb.org/3/movie/76341?api_key=c0954586125a696f1e442215a8fb87dc&query=seattle`
+        const moviesURL = `https://api.themoviedb.org/3/search/movie?api_key=c0954586125a696f1e442215a8fb87dc&query=seattle`
         const movieResponse = await axios.get(moviesURL);
-        const movieArray = movieResponse.data.data.map(movie => new Movie(movie));
-        console.log(movieResponse.data.data[0]);
+        const movieArray = movieResponse.data.results.map(movie => new Movie(movie));
+        console.log(movieResponse.data);
         response.status(200).send(movieArray);
     } catch (error) {
         next(error.message);
@@ -71,11 +71,11 @@ class Movie {
     constructor(movie) {
         this.title = movie.title;
         this.overview = movie.overview;
-        this.average_votes = movie.average_votes;
-        this.total_votes = movie.total_votes;
-        this.image_url = movie.image_url;
+        this.averageVotes = movie.vote_average;
+        this.totalVotes = movie.vote_count;
+        this.imageUrl = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
         this.popularity = movie.popularity;
-        this.released_on = movie.released_on;
+        this.releasedDate = movie.release_date;
     }
 }
 
