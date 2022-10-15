@@ -6,8 +6,8 @@ const cors = require('cors');
 require('dotenv').config();
 const axios = require('axios');
 
-// const weatherData = require('/weather');
-// const movieData = require('/movies')
+const getWeatherData = require('./modules/weather.js');
+const getMovieData = require('./modules/movies.js');
 
 // create an instance of an Express server
 const app = express();
@@ -24,60 +24,10 @@ app.get('/', (request, response) => {
 
 });
 
-// define an endpoint that gets the weather data and returns it to React
-app.get('/weather', async (request, response, next) => {
-    const lat = request.query.lat;
-    const lon = request.query.lon;
-    // console.log(lat, lon);
-    try {
-        //grab the searchQuery from the request object 
-        // baseURL, endpoint, query, queryParameters
-        const weatherURL = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&days=5&key=21634fd4e5154fb5a84ae23da4570a59`
-        const weatherResponse = await axios.get(weatherURL);
-        console.log(weatherResponse.data.data[0]);
-        const weatherArray = weatherResponse.data.data.map(forecast => new Forecast(forecast));
+app.get('/weather', getWeatherData)
 
-        response.status(200).send(weatherArray);
-    } catch (error) {
-        next(error.message);
-    }
-});
+app.get('/movies', getMovieData)
 
-class Forecast {
-    constructor(forecast) {
-        // find method to find the type of list we want to return
-        this.date = forecast.datetime;
-        this.description = forecast.weather.description;
-    };
-
-}
-
-app.get('/movies', async (request, response, next) => {
-    const movie = request.query.city;
-    console.log(movie);
-    try {
-        const moviesURL = `https://api.themoviedb.org/3/search/movie?api_key=c0954586125a696f1e442215a8fb87dc&query=${city}`
-        const movieResponse = await axios.get(moviesURL);
-        const movieArray = movieResponse.data.results.map(movie => new Movie(movie));
-        console.log(movieResponse.data);
-        response.status(200).send(movieArray);
-    } catch (error) {
-        next(error.message);
-    }
-}
-);
-
-class Movie {
-    constructor(movie) {
-        this.title = movie.title;
-        this.overview = movie.overview;
-        this.averageVotes = movie.vote_average;
-        this.totalVotes = movie.vote_count;
-        this.imageUrl = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
-        this.popularity = movie.popularity;
-        this.releaseDate = movie.release_date;
-    }
-}
 
 app.get('/fakeError', (request, response, next) => {
     try {
